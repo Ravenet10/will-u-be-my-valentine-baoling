@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>葆凌, 你愿意做我的情人吗?</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            border: 4px solid #ff6b8b;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #e91e63;
+            font-size: 2.2em;
+            margin: 12px 0;
+            line-height: 1.3;
+            font-weight: bold;
+        }
+
+        .heart {
+            color: #ff4757;
+            font-size: 28px;
+            animation: heartbeat 1s infinite;
+            display: inline-block;
+            margin: 0 8px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .gif_container {
+            margin: 12px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            border: 4px solid #fff;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gif_container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 240px;
+            object-fit: cover;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.4em;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        #yesBtn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: 3px solid #388E3C;
+            transition: transform 0.5s ease, padding 0.5s ease;
+        }
+
+        #yesBtn:hover {
+            background: linear-gradient(45deg, #45a049, #4CAF50);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        #noBtn {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+            border: 3px solid #c62828;
+            transition: all 0.5s ease;
+        }
+
+        #noBtn:hover {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(244, 67, 54, 0.3);
+        }
+
+        .message {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #fff0f5, #fff5f5);
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s;
+            border: 3px solid #ff6b8b;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message h2 {
+            color: #e91e63;
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .message p {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin: 12px 0;
+        }
+
+        .heart-burst {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart-particle {
+            position: absolute;
+            color: #ff4757;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatUp 3s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .click-counter {
+            font-size: 1em;
+            color: #666;
+            margin-top: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 6px 14px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .celebration-section {
+            display: none;
+        }
+
+        .celebration-gif-container {
+            margin: 20px auto;
+            max-width: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            border: 4px solid #fff;
+        }
+
+        .celebration-gif-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .gif_container {
+                max-width: 280px;
+                min-height: 210px;
+            }
+            
+            .heart {
+                font-size: 24px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1.2em;
+                min-width: 170px;
+            }
+            
+            .buttons {
+                gap: 15px;
+            }
+            
+            .message {
+                padding: 20px;
+            }
+            
+            .message h2 {
+                font-size: 1.7em;
+            }
+            
+            .message p {
+                font-size: 1em;
+            }
+            
+            .celebration-gif-container {
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.6em;
+            }
+            
+            .gif_container {
+                max-width: 240px;
+                min-height: 180px;
+            }
+            
+            .heart {
+                font-size: 20px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 1.1em;
+                min-width: 150px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .message h2 {
+                font-size: 1.5em;
+            }
+            
+            .celebration-gif-container {
+                max-width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-burst" id="heartBurst"></div>
+    
+    <div class="container">
+        <!-- Initial content -->
+        <div id="initialContent">
+            <div class="gif_container">
+                <img src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.webp" 
+                     alt="Cute Love Bear with Roses">
+            </div>
+            
+            <h1 id="titleText">
+                <span class="heart">❤️</span>
+                亲爱的葆凌, 你愿意做我的情人吗?
+                <span class="heart">❤️</span>
+            </h1>
+            
+            <div class="buttons" id="buttons">
+                <button class="btn" id="yesBtn">我淡然愿意!!! 🥰</button>
+                <button class="btn" id="noBtn">不要我不喜欢你!!!😒</button>
+            </div>
+            
+            <div class="click-counter hidden" id="clickCounter">
+                你已经拒绝了 <span id="count">0</span> 次了... 💔
+            </div>
+        </div>
+        
+        <!-- Celebration content (hidden initially) -->
+        <div class="celebration-section" id="celebrationSection">
+            <!-- Celebration GIF ABOVE the message -->
+            <div class="celebration-gif-container">
+                <img src="https://gifdb.com/images/high/cute-love-kisses-for-you-uujbuokzyop19e4w.webp" 
+                     alt="Kissing Bears Celebration">
+            </div>
+            
+            <!-- Celebration message BELOW the GIF -->
+            <div class="message" id="responseMessage">
+                <h2>YEAYYY!!! 我爱你宝宝!!! MWAHHH!!! ❤️😘</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const responseMessage = document.getElementById('responseMessage');
+            const buttons = document.getElementById('buttons');
+            const clickCounter = document.getElementById('clickCounter');
+            const countSpan = document.getElementById('count');
+            const title = document.getElementById('titleText');
+            const initialContent = document.getElementById('initialContent');
+            const celebrationSection = document.getElementById('celebrationSection');
+            const heartBurst = document.getElementById('heartBurst');
+            
+            let noCount = 0;
+            let yesScale = 1;
+            let noSize = 1;
+            
+            // Words for the no button in order
+            const noButtonTexts = [
+                "你确定吗？",
+                "那如果我好好地问呢?",
+                "求求你🥺",
+                "给你买奶茶?🧋",
+                "还是冰淇淋?🍦",
+                "求求你啦宝宝～ 😭",
+                "可是🥲",
+                "我要死了🥹",
+                "yepp我死了☠️",
+                "okiee 现在你在跟jasper的ghost说活👻",
+                "求求你啦宝宝🥹",
+                ":((",
+                "PLEASEE",
+                "제발",
+                "お願いします",
+                "No :("
+            ];
+            
+            // Create heart particles
+            function createHearts(count = 15) {
+                for (let i = 0; i < count; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.className = 'heart-particle';
+                        heart.innerHTML = '❤️';
+                        heart.style.left = Math.random() * 100 + 'vw';
+                        heart.style.fontSize = (Math.random() * 18 + 12) + 'px';
+                        heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                        heartBurst.appendChild(heart);
+                        
+                        setTimeout(() => {
+                            heart.remove();
+                        }, 3000);
+                    }, i * 100);
+                }
+            }
+            
+            // Start animations
+            createHearts();
+            setInterval(createHearts, 3000);
+            
+            // Yes button click
+            yesBtn.addEventListener('click', function() {
+                // Hide initial content
+                initialContent.style.display = 'none';
+                
+                // Show celebration section
+                celebrationSection.style.display = 'block';
+                
+                // Make sure the message is visible
+                responseMessage.style.display = 'block';
+                
+                // Create massive heart burst
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        createHearts(5);
+                    }, i * 50);
+                }
+                
+                // Play celebration sound
+                try {
+                    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-happy-crowd-laugh-464.mp3');
+                    audio.volume = 0.3;
+                    audio.play();
+                } catch (e) {
+                    console.log("Audio playback error:", e);
+                }
+            });
+            
+            // No button click
+            noBtn.addEventListener('click', function() {
+                noCount++;
+                countSpan.textContent = noCount;
+                clickCounter.classList.remove('hidden');
+                
+                // Make Yes button larger (SLOWER growth)
+                yesScale += 0.12;
+                yesBtn.style.transform = `scale(${yesScale})`;
+                
+                // Adjust padding gradually
+                const newPaddingV = 15 + Math.min(noCount * 0.8, 15);
+                const newPaddingH = 35 + Math.min(noCount * 1.2, 30);
+                yesBtn.style.padding = `${newPaddingV}px ${newPaddingH}px`;
+                
+                // Make No button smaller
+                noSize = Math.max(0.2, 1 - (noCount * 0.07));
+                noBtn.style.transform = `scale(${noSize})`;
+                const noPaddingV = Math.max(8, 15 - noCount * 0.7);
+                const noPaddingH = Math.max(15, 35 - noCount * 1.8);
+                noBtn.style.padding = `${noPaddingV}px ${noPaddingH}px`;
+                
+                // Change No button text
+                let textIndex = Math.min(noCount - 1, noButtonTexts.length - 1);
+                if (noCount > noButtonTexts.length) {
+                    textIndex = noButtonTexts.length - 1;
+                }
+                noBtn.textContent = noButtonTexts[textIndex];
+                
+                // Change font size for no button based on size
+                const fontSize = Math.max(0.7, noSize) * 1.4;
+                noBtn.style.fontSize = `${fontSize}em`;
+                
+                // Change button color based on count
+                const colors = [
+                    '#f44336', '#e53935', '#d32f2f', '#c62828',
+                    '#b71c1c', '#880e4f', '#6a1b9a', '#4a148c'
+                ];
+                const colorIndex = Math.min(noCount - 1, colors.length - 1);
+                noBtn.style.background = `linear-gradient(45deg, ${colors[colorIndex]}, ${colors[Math.max(0, colorIndex-1)] || colors[0]})`;
+                
+                // Create broken heart effect
+                for (let i = 0; i < 2; i++) {
+                    setTimeout(() => {
+                        const brokenHeart = document.createElement('div');
+                        brokenHeart.className = 'heart-particle';
+                        brokenHeart.innerHTML = '💔';
+                        brokenHeart.style.left = (Math.random() * 100) + 'vw';
+                        brokenHeart.style.fontSize = '16px';
+                        brokenHeart.style.color = '#888';
+                        heartBurst.appendChild(brokenHeart);
+                        
+                        setTimeout(() => {
+                            brokenHeart.remove();
+                        }, 2000);
+                    }, i * 200);
+                }
+                
+                // If too many no's, force yes eventually
+                if (noCount >= 25) {
+                    setTimeout(() => {
+                        yesBtn.click();
+                    }, 1000);
+                }
+                
+                // Play sad sound
+                try {
+                    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-cartoon-toy-whistle-616.mp3');
+                    audio.volume = 0.2;
+                    audio.play();
+                } catch (e) {
+                    console.log("Audio playback error:", e);
+                }
+            });
+            
+            // No button hover effect
+            noBtn.addEventListener('mouseover', function() {
+                noBtn.style.boxShadow = '0 12px 25px rgba(244, 67, 54, 0.4)';
+                noBtn.style.transform = `scale(${noSize * 1.05})`;
+            });
+            
+            noBtn.addEventListener('mouseout', function() {
+                noBtn.style.boxShadow = '0 6px 15px rgba(0, 0, 0, 0.2)';
+                noBtn.style.transform = `scale(${noSize})`;
+            });
+            
+            // Yes button hover effect
+            yesBtn.addEventListener('mouseover', function() {
+                yesBtn.style.boxShadow = '0 12px 25px rgba(76, 175, 80, 0.4)';
+                yesBtn.style.transform = `scale(${yesScale * 1.05})`;
+            });
+            
+            yesBtn.addEventListener('mouseout', function() {
+                yesBtn.style.boxShadow = '0 6px 15px rgba(0, 0, 0, 0.2)';
+                yesBtn.style.transform = `scale(${yesScale})`;
+            });
+        });
+    </script>
+</body>
+</html>
